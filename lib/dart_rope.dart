@@ -53,6 +53,40 @@ class Rope {
     return new_rope;
   }
 
+  //insert a string at a given index.
+  //TODO: Make this a non-static method. Currently I don't know how to get around 'this' being unassignable.
+  static Rope insert(Rope it, int index, String input) {
+    Rope other = it.split(index);
+
+    other = new Rope.init(input) + other;
+
+    if (it._root == null) {
+      it._root = new _Rope_Node();
+    }
+
+    if (index == 0) {
+      it = new Rope._from(other._root);
+      it._length = other._length;
+    } else {
+      it = new Rope._from((it + other)._root);
+      it._length = other._length;
+    }
+
+    return it;
+  }
+
+  //delete a character at a given index
+  Rope delete(int index, String input) {
+    if (input.length != 1) {
+      throw new Exception(
+          "Invalid argument in Rope:delete. Input value must be of length 1.");
+    }
+
+    Rope middle = this.split(index);
+    Rope right = middle.split(1);
+    return this + right;
+  }
+
   //Operator overloads
 
   //Index getter

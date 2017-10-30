@@ -90,4 +90,12 @@ void main() {
     expect(r7[122], ".");
     expect(r8.getLength(), 1);
   });
+
+  test('insert', () {
+    Rope r1 = new Rope.init(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
+    r1 = Rope.insert(r1, 0, "X");
+    expect(r1[0], "X");
+    expect(r1[1], "L");
+  });
 }
