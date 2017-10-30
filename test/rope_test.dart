@@ -40,5 +40,13 @@ void main() {
     Rope r3 = r1 + r2;
     expect(r3[r1.length], "U");
     expect(r3[r3.length - 1], ".");
+
+    r3[0] = "X";
+    expect(r1[0], "L");
+    expect(r3[0], "X");
+
+    r2[0] = "X";
+    expect(r3[r1.length], "U");
+    expect(r2[0], "X");
   });
 }

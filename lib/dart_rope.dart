@@ -1,6 +1,6 @@
 class Rope {
   //Fields
-  final _Node _root;
+  _Node _root;
   num length;
 
   //Constructors
@@ -20,6 +20,7 @@ class Rope {
 
   //Operator overloads
 
+  //Index getter
   String operator [](int index) {
     if (index > this.length - 1 || index < 0) {
       throw new Exception("Invalid argument in Rope:[]. Index out of bounds.");
@@ -27,12 +28,16 @@ class Rope {
     return _root.getIndex(index);
   }
 
+  //Index setter
   operator []=(int index, String val) {
     if (val.length != 1) {
       throw new Exception(
           "Invalid argument in Rope:[]=. Input value must be of length 1.");
     } else if (index > this.length - 1 || index < 0) {
       throw new Exception("Invalid argument in Rope:[]=. Index out of bounds.");
+    }
+    if (_root.isShared()) {
+      _root = _Node.move(_root);
     }
     _root.setIndex(index, val);
   }
@@ -47,6 +52,9 @@ class Rope {
     Rope new_rope = new Rope._from(new_root);
     new_rope.length = this.length + other.length;
 
+    this._root.addRefs();
+    other._root.addRefs();
+
     return new_rope;
   }
 }
@@ -59,12 +67,13 @@ class _Node {
   num refs;
 
   //Constructors
-
   _Node() {
     this.weight = 0;
+    this.refs = 1;
   }
 
   _Node.init(String input) {
+    this.refs = 1;
     if (input.length <= 10) {
       this.val = input;
       this.weight = input.length;
@@ -74,6 +83,14 @@ class _Node {
 
       this.weight = this.l.getSize();
     }
+  }
+
+  //Static method for moving the reference to a node if we are mutating it
+  static _Node move(_Node it) {
+    String content = it.getContent();
+    _Node new_node = new _Node.init(content);
+    it.removeRefs();
+    return new_node;
   }
 
   //Getter for indexing operation
@@ -92,9 +109,15 @@ class _Node {
   //Setter for indexing operation
   void setIndex(int index, String val) {
     if (this.weight <= index) {
+      if (this.r.isShared()) {
+        this.r = _Node.move(this.r);
+      }
       this.r.setIndex(index - this.weight, val);
     } else {
       if (this.l != null) {
+        if (this.l.isShared()) {
+          this.l = _Node.move(this.l);
+        }
         this.l.setIndex(index, val);
       } else {
         if (index + 1 >= this.val.length) {
@@ -105,6 +128,28 @@ class _Node {
           this.val = left + val + right;
         }
       }
+    }
+  }
+
+  //Utility method to add 1 to every ref count for this and all child nodes
+  void addRefs() {
+    this.refs++;
+    if (this.r != null) {
+      this.l.addRefs();
+      this.r.addRefs();
+    } else if (this.l != null) {
+      this.l.addRefs();
+    }
+  }
+
+  //Utility method to remove 1 from every ref count for this and all child nodes
+  void removeRefs() {
+    this.refs--;
+    if (this.r != null) {
+      this.l.addRefs();
+      this.r.addRefs();
+    } else if (this.l != null) {
+      this.l.addRefs();
     }
   }
 
@@ -120,5 +165,19 @@ class _Node {
   //Utility method that returns true if the node is a leaf node
   bool isLeaf() {
     return this.val != null;
+  }
+
+  //Method for getting the full string content of a node and all it's children
+  String getContent() {
+    if (this.isLeaf()) {
+      return this.val;
+    } else {
+      return this.l.getContent() + (this.r != null ? this.r.getContent() : "");
+    }
+  }
+
+  //Method for checking the ref count. Returns true if ref count is more than 1
+  bool isShared() {
+    return this.refs > 1;
   }
 }
