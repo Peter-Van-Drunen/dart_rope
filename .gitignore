@@ -1,0 +1,6 @@
+.idea/
+.packages
+.pub/
+bin/
+dart_rope.iml
+pubspec.lock

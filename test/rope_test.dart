@@ -1,4 +1,4 @@
-import 'package:dart_rope/Rope.dart';
+import 'package:dart_rope/dart_rope.dart';
 import 'package:test/test.dart';
 
 void main() {
