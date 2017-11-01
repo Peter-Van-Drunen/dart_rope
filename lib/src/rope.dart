@@ -100,6 +100,14 @@ class Rope {
     return this._root.get_content().substring(start, end);
   }
 
+  //Rebalance tree so it doesn't lose it's cool
+  void balance() {
+    String content = this._root.get_content();
+
+    this._root = new Rope_Node.init(content);
+    this._length = content.length;
+  }
+
   //Operator overloads
 
   //Index getter
@@ -139,6 +147,10 @@ class Rope {
     this._root.add_refs();
     other._root.add_refs();
 
+    if (max_depth() > 20 && _length < 1000) {
+      new_rope.balance();
+    }
+
     return new_rope;
   }
 
@@ -149,5 +161,10 @@ class Rope {
   //length getter
   num get_length() {
     return _length;
+  }
+
+  //calculate and return max depth
+  num max_depth() {
+    return this._root.max_depth();
   }
 }

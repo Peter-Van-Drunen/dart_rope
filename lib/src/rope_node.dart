@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class Rope_Node {
   //Fields
   Rope_Node l, r;
@@ -162,6 +164,14 @@ class Rope_Node {
       return this.l.get_content() +
           (this.r != null ? this.r.get_content() : "");
     }
+  }
+
+  num max_depth() {
+    if (this.is_leaf()) {
+      return 0;
+    }
+    return 1 +
+        max(this.l.max_depth(), (this.r != null ? this.r.max_depth() : 0));
   }
 
   //Method for checking the ref count. Returns true if ref count is more than 1
