@@ -8,7 +8,9 @@ class Rope {
   //Default Constructor
   Rope()
       : _root = new _Rope_Node(),
-        _length = 0;
+        _length = 0 {
+    _root.val = "";
+  }
 
   //String Constructor
   Rope.init(String input)
@@ -24,17 +26,18 @@ class Rope {
 
   //Split method that splits the rope in place, returning the 2nd half.
   Rope split(int index) {
-    if (this._root.isShared()) {
-      this._root = _Rope_Node.move(this._root);
-    }
     if (index > this._length - 1 || index < 0) {
       throw new Exception(
           "Invalid argument in Rope:split(). Index out of bounds.");
     }
+    if (this._root.isShared()) {
+      this._root = _Rope_Node.move(this._root);
+    }
     if (index == 0) {
       Rope temp = new Rope._from(this._root);
       temp._length = this._length;
-      this._root = null;
+      this._root = new _Rope_Node();
+      this._root.val = "";
       this._length = 0;
       return temp;
     }
@@ -54,37 +57,31 @@ class Rope {
   }
 
   //insert a string at a given index.
-  //TODO: Make this a non-static method. Currently I don't know how to get around 'this' being unassignable.
-  static Rope insert(Rope it, int index, String input) {
-    Rope other = it.split(index);
+  void insert(int index, String input) {
+    Rope that = new Rope._from(this._root);
+    that._length = this._length;
 
-    other = new Rope.init(input) + other;
+    Rope right = that.split(index);
 
-    if (it._root == null) {
-      it._root = new _Rope_Node();
-    }
-
-    if (index == 0) {
-      it = new Rope._from(other._root);
-      it._length = other._length;
-    } else {
-      it = new Rope._from((it + other)._root);
-      it._length = other._length;
-    }
-
-    return it;
+    that = that + new Rope.init(input);
+    that = that + right;
+    this._root = that._root;
+    this._length = that._length;
   }
 
   //delete a character at a given index
-  Rope delete(int index, String input) {
-    if (input.length != 1) {
-      throw new Exception(
-          "Invalid argument in Rope:delete. Input value must be of length 1.");
-    }
+  String delete(int index) {
+    Rope that = new Rope._from(this._root);
+    that._length = this._length;
 
-    Rope middle = this.split(index);
-    Rope right = middle.split(1);
-    return this + right;
+    Rope mid = that.split(index);
+    Rope right = mid.split(1);
+
+    that = that + right;
+    this._root = that._root;
+    this._length = this._length - 1;
+
+    return mid._root.getContent();
   }
 
   //Operator overloads
@@ -111,8 +108,10 @@ class Rope {
     _root.setIndex(index, val);
   }
 
+  //Concat using the + operator
   Rope operator +(Rope other) {
     _Rope_Node new_root = new _Rope_Node();
+
     new_root.l = this._root;
     new_root.r = other._root;
 
@@ -125,6 +124,10 @@ class Rope {
     other._root.addRefs();
 
     return new_rope;
+  }
+
+  String toString() {
+    return this._root.getContent();
   }
 
   //length getter
@@ -286,7 +289,7 @@ class _Rope_Node {
 
   //Utility method that returns true if the node is a leaf node
   bool isLeaf() {
-    return this.val != null;
+    return this.val != null || this.val == "";
   }
 
   //Method for getting the full string content of a node and all it's children

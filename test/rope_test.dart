@@ -94,8 +94,31 @@ void main() {
   test('insert', () {
     Rope r1 = new Rope.init(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
-    r1 = Rope.insert(r1, 0, "X");
+    r1.insert(0, "X");
     expect(r1[0], "X");
     expect(r1[1], "L");
+
+    Rope r2 = new Rope.init(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
+    r2.insert(11, "X");
+    expect(r2[11], "X");
+    expect(r2[12], " ");
+
+    Rope r3 = new Rope.init(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
+    r3.insert(22, "XYZ");
+    expect(r3[24], "Z");
+    expect(r3[25], "a");
+    expect(r3.toString(),
+        "Lorem ipsum dolor sit XYZamet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
+  });
+
+  test('delete', () {
+    Rope r1 = new Rope.init(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
+    expect(r1.delete(0), "L");
+    expect(r1.delete(11), "d");
+    expect(r1.toString(),
+        "orem ipsum olor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
   });
 }
