@@ -7,7 +7,7 @@ main() {
   Stopwatch sw = new Stopwatch();
   Random rand = new Random();
 
-  var sherlock = new File("./test/sherlock.txt");
+  var sherlock = new File("./test/lorem.txt");
 
   String sherlock_string = sherlock.readAsStringSync();
 

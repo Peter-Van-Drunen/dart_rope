@@ -4,3 +4,4 @@
 bin/
 dart_rope.iml
 pubspec.lock
+/test/sherlock.txt
