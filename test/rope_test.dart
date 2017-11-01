@@ -5,14 +5,14 @@ void main() {
   test('default constructor', () {
     Rope r1 = new Rope();
 
-    expect(r1.getLength(), 0);
+    expect(r1.get_length(), 0);
   });
 
   test('init constructor', () {
     Rope r1 = new Rope.init(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
 
-    expect(r1.getLength(), 123);
+    expect(r1.get_length(), 123);
   });
 
   test('index access', () {
@@ -38,18 +38,18 @@ void main() {
         "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
 
     Rope r3 = r1 + r2;
-    expect(r3[r1.getLength()], "U");
-    expect(r3[r3.getLength() - 1], ".");
+    expect(r3[r1.get_length()], "U");
+    expect(r3[r3.get_length() - 1], ".");
 
     r3[0] = "X";
     expect(r1[0], "L");
     expect(r3[0], "X");
 
     r2[0] = "X";
-    expect(r3[r1.getLength()], "U");
+    expect(r3[r1.get_length()], "U");
     expect(r2[0], "X");
 
-    expect(r3.getLength(), r1.getLength() + r2.getLength());
+    expect(r3.get_length(), r1.get_length() + r2.get_length());
   });
 
   test('split', () {
@@ -58,7 +58,7 @@ void main() {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
     Rope r2 = r1.split(23);
 
-    expect(r1.getLength(), 23);
+    expect(r1.get_length(), 23);
     expect(r1[22], "a");
     expect(r2[0], "m");
 
@@ -67,7 +67,7 @@ void main() {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
     Rope r4 = r3.split(22);
 
-    expect(r3.getLength(), 22);
+    expect(r3.get_length(), 22);
     expect(r3[21], " ");
     expect(r4[0], "a");
 
@@ -76,8 +76,8 @@ void main() {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
     Rope r6 = r5.split(0);
 
-    expect(r5.getLength(), 0);
-    expect(r6.getLength(), 124);
+    expect(r5.get_length(), 0);
+    expect(r6.get_length(), 124);
     expect(r6[0], "L");
     expect(r6[123], " ");
 
@@ -88,7 +88,7 @@ void main() {
 
     expect(r8[0], " ");
     expect(r7[122], ".");
-    expect(r8.getLength(), 1);
+    expect(r8.get_length(), 1);
   });
 
   test('insert', () {
@@ -120,5 +120,13 @@ void main() {
     expect(r1.delete(11), "d");
     expect(r1.toString(),
         "orem ipsum olor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
+  });
+
+  test('report', () {
+    Rope r1 = new Rope.init(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ");
+    expect(r1.report(0, 5), "Lorem");
+    expect(r1.report(0, 5), "Lorem");
+    expect(r1.report(6, 11), "ipsum");
   });
 }

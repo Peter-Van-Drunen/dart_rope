@@ -32,7 +32,7 @@ class Rope {
       throw new Exception(
           "Invalid argument in Rope:split(). Index out of bounds.");
     }
-    if (this._root.isShared()) {
+    if (this._root.is_shared()) {
       this._root = Rope_Node.move(this._root);
     }
     if (index == 0) {
@@ -93,7 +93,11 @@ class Rope {
     this._root = that._root;
     this._length = this._length - 1;
 
-    return mid._root.getContent();
+    return mid._root.get_content();
+  }
+
+  String report(int start, int end) {
+    return this._root.get_content().substring(start, end);
   }
 
   //Operator overloads
@@ -103,7 +107,7 @@ class Rope {
     if (index > this._length - 1 || index < 0) {
       throw new Exception("Invalid argument in Rope:[]. Index out of bounds.");
     }
-    return _root.getIndex(index);
+    return _root.get_index(index);
   }
 
   //Index setter
@@ -114,10 +118,10 @@ class Rope {
     } else if (index > this._length - 1 || index < 0) {
       throw new Exception("Invalid argument in Rope:[]=. Index out of bounds.");
     }
-    if (_root.isShared()) {
+    if (_root.is_shared()) {
       _root = Rope_Node.move(_root);
     }
-    _root.setIndex(index, val);
+    _root.set_index(index, val);
   }
 
   //Concat using the + operator
@@ -127,23 +131,23 @@ class Rope {
     new_root.l = this._root;
     new_root.r = other._root;
 
-    new_root.weight = new_root.l.getWeight();
+    new_root.weight = new_root.l.get_weight();
 
     Rope new_rope = new Rope._from(new_root);
     new_rope._length = this._length + other._length;
 
-    this._root.addRefs();
-    other._root.addRefs();
+    this._root.add_refs();
+    other._root.add_refs();
 
     return new_rope;
   }
 
   String toString() {
-    return this._root.getContent();
+    return this._root.get_content();
   }
 
   //length getter
-  num getLength() {
+  num get_length() {
     return _length;
   }
 }
