@@ -1,6 +1,6 @@
 name: dart_rope
 description: An implementation of the Rope data structure in Dart.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/Peter-Van-Drunen
 author: Peter Van Drunen <peter.b.vandrunen@gmail.com>
 
